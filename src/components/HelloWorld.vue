@@ -15,7 +15,7 @@ export default {
   name: 'HelloWorld',
   data () {
     return {
-      msg: 'Welcome to Your Vue.js App',
+      msg: 'WordPaster for vue ueditor',
       myConfig: {
       // 编辑器不自动被内容撑高
       autoHeightEnabled: false,
