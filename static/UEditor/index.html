@@ -1,0 +1,35 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" >
+<head>
+    <title>Web截屏控件2演示界面</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<script type="text/javascript" src="ueditor.config.js" charset="utf-8"></script>
+	<script type="text/javascript" src="ueditor.all.js" charset="utf-8"></script>
+    <link type="text/css" rel="Stylesheet" href="scp/scp.css" />
+    <link type="text/css" rel="stylesheet" href="scp/skygqbox.css" />
+    <script type="text/javascript" src="scp/jquery-1.4.min.js"></script>
+    <script type="text/javascript" src="scp/json2.min.js" charset="utf-8"></script>
+    <script type="text/javascript" src="scp/skygqbox.js"></script>
+    <script type="text/javascript" src="scp/scp.app.js" charset="utf-8"></script>
+    <script type="text/javascript" src="scp/scp.edge.js" charset="utf-8"></script>
+    <script type="text/javascript" src="scp/scp.js" charset="utf-8"></script>
+</head>
+<body>
+    <p>演示ScreenCapture与ueditor1x整合</p>
+    <textarea name="后台取值的key" id="myEditor">这里写你的初始化内容</textarea>
+    <div id="scpPanel"></div>
+	<script type="text/javascript" language="javascript">
+        var scpMgr = new CaptureManager();
+        var editor = null;
+		scpMgr.Config["PostUrl"] = "http://localhost:100/asp/upload.asp";
+        scpMgr.event.postComplete = function (url) {
+            var img = '<img src="' + url + "?t=" + new Date().getTime() + '"/>';
+            editor.execCommand("insertHtml", img);
+        };
+        scpMgr.loadAuto();		
+
+		UE.getEditor('myEditor', {onready: function (){editor = this;}//创建一个编辑器实例
+		});
+	</script>
+</body>
+</html>
