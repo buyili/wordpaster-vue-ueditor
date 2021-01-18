@@ -119,6 +119,9 @@ export function WebServer(mgr)
 export function WordPasterManager()
 {
 	var _this = this;
+	this.data={editor:null,
+		browserName:navigator.userAgent.toLowerCase(),
+		browser:{ie:true,ie64:false,firefox:false,chrome:false,chrome45:false,arm64:false,mips64:false,edge:false}};
 	
     window.UE.registerUI('wordpaster', function (editor, uiName) {
         editor.registerCommand(uiName, {
@@ -298,7 +301,9 @@ export function WordPasterManager()
 		, edge: { protocol: "wordpaster", port: 9200, visible: false }
 		, "ExePath": "http://res2.ncmem.com/download/WordPaster/fast/2.0.29/WordPaster.exe"
 		, "mac": { path: "http://res2.ncmem.com/download/WordPaster/mac/1.0.17/WordPaster.pkg" }
-		, "linux": { path: "https://ncmem2.oss-cn-shanghai.aliyuncs.com/download/WordPaster/linux/1.0.5/wordpaster.deb" }
+		, "linux": { path: "http://res2.ncmem.com/download/WordPaster/linux/1.0.8/com.ncmem.wordpaster_2020.12.3-1_amd64.deb" }
+		, "arm64": { path: "http://res2.ncmem.com/download/WordPaster/arm64/1.0.5/com.ncmem.wordpaster_2020.12.3-1_arm64.deb" }
+		, "mips64": { path: "http://res2.ncmem.com/download/WordPaster/mips64/1.0.1/com.ncmem.wordpaster_2020.12.3-1_mips64el.deb" }
 	};	
 	this.EditorContent = ""; //编辑器内容。当图片上传完后需要更新此变量值
 	this.CurrentUploader = null; //当前上传项。
@@ -399,19 +404,26 @@ export function WordPasterManager()
 	};
     this.app.ins = this;
     var browserName = navigator.userAgent.toLowerCase();
-	this.ie = browserName.indexOf("msie") > 0;
+	this.data.browser.ie = browserName.indexOf("msie") > 0;
     //IE11
-	this.ie = this.ie ? this.ie : browserName.search(/(msie\s|trident.*rv:)([\w.]+)/) != -1;
-	this.firefox = browserName.indexOf("firefox") > 0;
-	this.chrome = browserName.indexOf("chrome") > 0;
-	this.chrome45 = false;
-	this.edge = navigator.userAgent.indexOf("Edge") > 0;
+	this.data.browser.ie = this.data.browser.ie ? this.data.browser.ie : browserName.search(/(msie\s|trident.*rv:)([\w.]+)/) != -1;
+	this.data.browser.firefox = this.data.browserName.indexOf("firefox") > 0;
+	this.data.browser.chrome = this.data.browserName.indexOf("chrome") > 0;
+	this.data.browser.mips64 = this.data.browserName.indexOf("mips64")>0;
+	this.data.browser.arm64 = this.data.browserName.indexOf("aarch64")>0;
+	this.data.browser.chrome45 = false;
+	this.data.browser.edge = navigator.userAgent.indexOf("Edge") > 0;
 	this.chrVer = navigator.appVersion.match(/Chrome\/(\d+)/);
 	this.ffVer = navigator.userAgent.match(/Firefox\/(\d+)/);
-	if (this.edge) { this.ie = this.firefox = this.chrome = this.chrome45 = false; }
+	if (this.data.browser.edge) { 
+		this.data.browser.ie = 
+		this.data.browser.firefox = 
+		this.data.browser.chrome = 
+		this.data.browser.chrome45 = false; 
+	}
 
     $(window).bind("beforeunload", function () {
-        if (this.edge) _this.edgeApp.close();
+        if (this.data.browser.edge) _this.edgeApp.close();
     });
     //Win64
     if (window.navigator.platform == "Win64")
@@ -419,40 +431,40 @@ export function WordPasterManager()
 		$.extend(this.Config.ie,this.Config.ie64);
     }//macOS
     else if (window.navigator.platform == "MacIntel") {
-        this.edge = true;
+        this.data.browser.edge = true;
         this.app.postMessage = this.app.postMessageEdge;
         this.edgeApp.run = this.edgeApp.runChr;
         this.Config.ExePath = this.Config.mac.path;
     }
     else if (window.navigator.platform == "Linux x86_64") {
-        this.edge = true;
+        this.data.browser.edge = true;
         this.app.postMessage = this.app.postMessageEdge;
         this.edgeApp.run = this.edgeApp.runChr;
         this.Config.ExePath = this.Config.linux.path;
     }//Firefox
-	else if (this.firefox)
+	else if (this.data.browser.firefox)
     {
         this.app.postMessage = this.app.postMessageEdge;
         this.edgeApp.run = this.edgeApp.runChr;
-        this.edge = true;
+        this.data.browser.edge = true;
 	} //chrome
-	else if (this.chrome)
+	else if (this.data.browser.chrome)
 	{
 	    _this.Config["XpiPath"] = _this.Config["CrxPath"];
 	    _this.Config["XpiType"] = _this.Config["CrxType"];
 	    
-        this.edge = true;
+        this.data.browser.edge = true;
         this.app.postMessage = this.app.postMessageEdge;
         this.edgeApp.run = this.edgeApp.runChr;
 	}
-	else if (this.edge)
+	else if (this.data.browser.edge)
     {
         this.app.postMessage = this.app.postMessageEdge;
 	}
 
     this.pluginLoad = function () {
         if (!this.pluginInited) {
-            if (this.edge) {
+            if (this.data.browser.edge) {
                 this.edgeApp.connect();
             }
         }
@@ -523,12 +535,12 @@ export function WordPasterManager()
 			静态加截控件代码，在复杂WEB系统中或者框架页面中请静态方式加截Word解析组件(Xproer.WordParser)。
 			<object id="objWordParser" classid="clsid:2404399F-F06B-477F-B407-B8A5385D2C5E"	width="1" height="1" ></object>
 		*/
-        if (!this.chrome45) acx += '<embed name="' + this.ffPasterName + '" type="' + this.Config["XpiType"] + '" pluginspage="' + this.Config["XpiPath"] + '" width="1" height="1"/>';
+        if (!this.data.browser.chrome45) acx += '<embed name="' + this.ffPasterName + '" type="' + this.Config["XpiType"] + '" pluginspage="' + this.Config["XpiPath"] + '" width="1" height="1"/>';
         //Word解析组件
         acx += ' <object name="' + this.iePasterName + '" classid="clsid:' + this.Config.ie.clsid + '"';
 	    acx += ' codebase="' + this.Config.ie.path + '#version=' + this.Config["Version"] + '"';
 	    acx += ' width="1" height="1" ></object>';
-	    if (this.edge) acx = '';
+	    if (this.data.browser.edge) acx = '';
 	    //单张图片上传窗口
 	    acx += '<div name="imgPasterDlg" class="panel-paster" style="display:none;">';
 	    acx += '<img name="ico" id="infIco" alt="进度图标" src="' + this.Config["IcoUploader"] + '" /><span name="msg">图片上传中...</span><span name="percent">10%</span>';
@@ -614,13 +626,13 @@ export function WordPasterManager()
 	{
         setTimeout(function ()
         {
-            if (!_this.edge)
+            if (!_this.data.browser.edge)
             {
                 _this.parter = _this.ffPaster;
-                if (_this.ie) _this.parter = _this.ieParser;
+                if (_this.data.browser.ie) _this.parter = _this.ieParser;
                 _this.parter.recvMessage = _this.recvMessage;
             }
-            if (_this.edge) {
+            if (_this.data.browser.edge) {
                 _this.edgeApp.connect();
             }
             else { _this.app.init(); }
@@ -703,16 +715,16 @@ export function WordPasterManager()
 	this.PastePPT = function ()
 	{
 		if( !this.pluginCheck() ) return;
-		if (!this.chrome45 && !_this.edge)
+		if (!this.data.browser.chrome45 && !_this.data.browser.edge)
 		{
 
 			this.app.pastePPT();
 		}
-		else if (this.chrome45)
+		else if (this.data.browser.chrome45)
 		{
 			this.app.pastePPT();
 		}
-		else if(this.edge)
+		else if(this.data.browser.edge)
 		{
 			this.app.pastePPT();
 		}
