@@ -423,7 +423,7 @@ export function WordPasterManager()
 	}
 
     $(window).bind("beforeunload", function () {
-        if (this.data.browser.edge) _this.edgeApp.close();
+        if (_this.data.browser.edge) _this.edgeApp.close();
     });
     //Win64
     if (window.navigator.platform == "Win64")
@@ -600,7 +600,7 @@ export function WordPasterManager()
 
 	this.LoadTo = function (oid)
     {
-        if (WordPaster.inited)
+        if (!WordPaster.inited)
         {
             var dom = $("#" + oid).append(this.GetHtml());
             this.ffPaster = dom.find('embed[name="' + this.ffPasterName + '"]').get(0);
@@ -1033,6 +1033,7 @@ export var WordPaster = {
         if (this.instance == null) {
             this.instance = new WordPasterManager();
             $.extend(this.instance.Config,cfg);
+            window.WordPaster = WordPaster;
         }
         return this.instance;
     }
