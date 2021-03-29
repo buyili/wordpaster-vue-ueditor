@@ -102,7 +102,6 @@ export function WebServer(mgr)
     this.close = function ()
     {
         this.exit = true;
-        if (this.socket) { this.socket.close(3000, "close"); }
     };
     this.send = function (p)
     {
@@ -422,9 +421,6 @@ export function WordPasterManager()
 		this.data.browser.chrome45 = false; 
 	}
 
-    $(window).bind("beforeunload", function () {
-        if (_this.data.browser.edge) _this.edgeApp.close();
-    });
     //Win64
     if (window.navigator.platform == "Win64")
 	{
