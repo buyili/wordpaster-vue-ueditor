@@ -39,6 +39,10 @@ export default {
             PostUrl:"http://localhost:8891/upload.aspx",
             ImageUrl:"http://localhost:8891{url}"
           }).Load();
+    },
+    ready(ue){
+      //
+      ue.addshortcutkey({"wordpaster":"ctrl+86"});
     }
   }
 }
