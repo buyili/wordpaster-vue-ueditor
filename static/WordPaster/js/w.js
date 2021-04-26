@@ -10,27 +10,7 @@ import './jquery-1.8.3.min'
     更新记录：
 		2012-07-04 增加对IE9的支持。
 */
-
-//系统错误
-var WordPasterError = {
-	  "0": "连接服务器错误"
-	, "1": "发送数据错误"
-	, "2": "接收数据错误"
-	, "3": "未设置文件路径"
-	, "4": "本地文件不存在"
-	, "5": "打开本地文件错误"
-	, "6": "不能读取本地文件"
-	, "7": "公司未授权"
-	, "8": "未设置IP"
-	, "9": "域名未授权"
-	, "10": "文件大小超出限制"
-	, "11": "不能设置回调函数"
-	, "12": "Native控件错误"
-	, "13": "Word图片数量超过限制"
-};
 function debugMsg(m) { $("#msg").append(m);}
-
-var WordPasteImgType = {local:0/*本地图片*/,network:1/*网络图片*/,word:2/*word图片*/};
 
 export function WebServer(mgr)
 {
@@ -303,6 +283,23 @@ export function WordPasterManager()
 		, "linux": { path: "http://res2.ncmem.com/download/WordPaster/linux/1.0.8/com.ncmem.wordpaster_2020.12.3-1_amd64.deb" }
 		, "arm64": { path: "http://res2.ncmem.com/download/WordPaster/arm64/1.0.5/com.ncmem.wordpaster_2020.12.3-1_arm64.deb" }
 		, "mips64": { path: "http://res2.ncmem.com/download/WordPaster/mips64/1.0.1/com.ncmem.wordpaster_2020.12.3-1_mips64el.deb" }
+		, errCode:{
+			"0": "连接服务器错误"
+		  , "1": "发送数据错误"
+		  , "2": "接收数据错误"
+		  , "3": "未设置文件路径"
+		  , "4": "本地文件不存在"
+		  , "5": "打开本地文件错误"
+		  , "6": "不能读取本地文件"
+		  , "7": "公司未授权"
+		  , "8": "未设置IP"
+		  , "9": "域名未授权"
+		  , "10": "文件大小超出限制"
+		  , "11": "不能设置回调函数"
+		  , "12": "Native控件错误"
+		  , "13": "Word图片数量超过限制"
+	  	}
+		, imgType:{local:0/*本地图片*/,network:1/*网络图片*/,word:2/*word图片*/}
 	};	
 	this.EditorContent = ""; //编辑器内容。当图片上传完后需要更新此变量值
 	this.CurrentUploader = null; //当前上传项。
@@ -312,7 +309,7 @@ export function WordPasterManager()
 	this.UploaderListCount = 0; //上传项总数
 	this.dialogOpened=false;
 	this.fileMap = new Object();//文件映射表。
-	this.postType = WordPasteImgType.word;//默认是word
+	this.postType = this.Config.imgType.word;//默认是word
 	this.working = false;//正在上传中
     this.pluginInited = false;
     this.edgeApp = new WebServer(this);
@@ -843,7 +840,7 @@ export function WordPasterManager()
 	};
 	this.WordParser_PasteWord = function (json)
     {
-	    this.postType = WordPasteImgType.word;
+	    this.postType = this.Config.imgType.word;
 	    this.EditorContent = json.word;
 	    for (var i = 0, l = json.imgs.length; i < l; ++i)
 	    {
@@ -852,7 +849,7 @@ export function WordPasterManager()
 	};
 	this.WordParser_PasteExcel = function (json)
 	{
-	    this.postType = WordPasteImgType.word;
+	    this.postType = this.Config.imgType.word;
 	    this.EditorContent = json.word;
 	    for (var i = 0, l = json.imgs.length; i < l; ++i)
 	    {
@@ -862,14 +859,14 @@ export function WordPasterManager()
 	};
 	this.WordParser_PasteHtml = function (json)
 	{
-	    this.postType = WordPasteImgType.word;
+	    this.postType = this.Config.imgType.word;
 	    this.InsertHtml(json.word);//
         this.working = false;
         this.CloseDialogFile();
 	};
 	this.WordParser_PasteFiles = function (json)
 	{
-	    this.postType = WordPasteImgType.local;
+	    this.postType = this.Config.imgType.local;
 	    for (var i = 0, l = json.imgs.length; i < l; ++i)
 	    {
 	        var task = this.addImgLoc(json.imgs[i]);
@@ -885,7 +882,7 @@ export function WordPasterManager()
 	};
 	this.WordParser_PasteAuto = function (json)
 	{
-	    this.postType = WordPasteImgType.network;
+	    this.postType = this.Config.imgType.network;
 	    for (var i = 0, l = json.imgs.length; i < l; ++i)
 	    {
 	        this.addImgLoc(json.imgs[i]);
@@ -911,7 +908,7 @@ export function WordPasterManager()
 	{
 		this.OpenDialogPaste();
         this.imgMsg.html(
-            WordPasterError[json.value] + "<br/>" +
+            this.Config.errCode[json.value] + "<br/>" +
             "PostUrl:" + this.Config["PostUrl"] + "<br/>" +
             "License:" + this.Config["License"] + "<br/>" +
             "License2:" + this.Config["License2"] + "<br/>" +
@@ -939,12 +936,12 @@ export function WordPasterManager()
 	this.Queue_Complete = function (json)
 	{
 	    //上传网络图片
-	    if (_this.postType == WordPasteImgType.network)
+	    if (_this.postType == this.Config.imgType.network)
 	    {
 			//_this.GetEditor().setData(json.word);
 			this.data.editor.setData( json.word );
 	    } //上传Word图片时才替换内容
-	    else if (_this.postType == WordPasteImgType.word)
+	    else if (_this.postType == this.Config.imgType.word)
 	    {
 	        _this.InsertHtml(json.word);//
 	    }
@@ -958,10 +955,10 @@ export function WordPasterManager()
         this.CloseDialogPaste();
     };
     this.imgs_out_limit = function (json) {
-        layer.alert(WordPasterError["13"] + "<br/>文档图片数量：" + json.imgCount + "<br/>限制数量：" + json.imgLimit, { icon: 2 });
+        layer.alert(this.Config.errCode["13"] + "<br/>文档图片数量：" + json.imgCount + "<br/>限制数量：" + json.imgLimit, { icon: 2 });
     };
     this.url_unauth = function (json) {
-        layer.alert(WordPasterError["9"] + "<br/>PostUrl：" + json.url, { icon: 2 });
+        layer.alert(this.Config.errCode["9"] + "<br/>PostUrl：" + json.url, { icon: 2 });
     };
     this.state_change = function (json) {
         if (json.value == "parse_document")

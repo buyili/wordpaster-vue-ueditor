@@ -25,19 +25,21 @@ export function FileUploader(fileID,filePath,mgr,width,height)
 	this.Fields = mgr.Fields;
 	this.Browser = mgr.Browser;
 	this.InsertHtml = mgr.InsertHtml;
-	this.data={state:{
-		Ready: 0,
-		Posting: 1,
-		Stop: 2,
-		Error: 3,
-		GetNewID: 4,
-		Complete: 5,
-		WaitContinueUpload: 6,
-		None: 7,
-		Waiting: 8
-	},
-error:{}};
-$.extend(this.data.error,mgr.data.error);
+	this.data={
+		state:{
+			Ready: 0,
+			Posting: 1,
+			Stop: 2,
+			Error: 3,
+			GetNewID: 4,
+			Complete: 5,
+			WaitContinueUpload: 6,
+			None: 7,
+			Waiting: 8
+		},
+		error:{}
+	};
+	$.extend(this.data.error,mgr.data.error);
 
 	this.PostLocalFile = false;//是否上传本地文件
 	this.imgW = width;
@@ -64,7 +66,7 @@ $.extend(this.data.error,mgr.data.error);
 
 	this.postError = function (json)
 	{
-	    this.pMsg.text(WordPasterError[json.value]);
+	    this.pMsg.text(this.Config.errCode[json.value]);
 	    this.pButton.text("重试");
 	};
 
