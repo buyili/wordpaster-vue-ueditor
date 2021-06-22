@@ -66,7 +66,7 @@ export function FileUploader(fileID,filePath,mgr,width,height)
 
 	this.postError = function (json)
 	{
-	    this.pMsg.text(this.Config.errCode[json.value]);
+	    this.pMsg.text(this.Manager.data.error[json.value]);
 	    this.pButton.text("重试");
 	};
 

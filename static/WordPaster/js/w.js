@@ -2,11 +2,11 @@
 import './json2.min'
 import './jquery-1.8.3.min'
 /*
-	版权所有 2009-2020 荆门泽优软件有限公司 保留所有版权。
+	版权所有 2009-2021 荆门泽优软件有限公司 保留所有版权。
 	产品：http://www.ncmem.com/webapp/wordpaster/index.aspx
     控件：http://www.ncmem.com/webapp/wordpaster/pack.aspx
     示例：http://www.ncmem.com/webapp/wordpaster/versions.aspx
-    版本：2.4.2
+    版本：2.4.3
     更新记录：
 		2012-07-04 增加对IE9的支持。
 */
@@ -98,9 +98,6 @@ export function WebServer(mgr)
 export function WordPasterManager()
 {
 	var _this = this;
-	this.data={editor:null,
-		browserName:navigator.userAgent.toLowerCase(),
-		browser:{ie:true,ie64:false,firefox:false,chrome:false,chrome45:false,arm64:false,mips64:false,edge:false}};
 	
     window.UE.registerUI('wordpaster', function (editor, uiName) {
         editor.registerCommand(uiName, {
@@ -226,7 +223,28 @@ export function WordPasterManager()
     this.imgIco = null;//jquery obj
     this.imgMsg = null;//jquery obj
     this.imgPercent = null;//jquery obj
-    this.ui = { setup: null, single: null };
+    this.ui = { setup: null ,single:null};
+    this.data={
+    	editor:null,
+        browser:{name:navigator.userAgent.toLowerCase(),ie:true,ie64:false,chrome:false,firefox:false,edge:false,arm64:false,mips64:false,platform:window.navigator.platform.toLowerCase()},
+        error:{
+        "0": "连接服务器错误",
+        "1": "发送数据错误",
+        "2": "接收数据错误",
+        "3": "未设置文件路径",
+        "4": "本地文件不存在",
+        "5": "打开本地文件错误",
+        "6": "不能读取本地文件",
+        "7": "公司未授权",
+        "8": "未设置IP",
+        "9": "域名未授权",
+        "10": "文件大小超出限制",
+        "11": "不能设置回调函数",
+        "12": "Native控件错误",
+        "13": "Word图片数量超过限制"
+      },
+      type:{local:0/*本地图片*/,network:1/*网络图片*/,word:2/*word图片*/}
+    };
     this.layerPaste = 0;
     this.ffPaster = null;
     this.ieParser = null;
@@ -283,24 +301,7 @@ export function WordPasterManager()
 		, "linux": { path: "http://res2.ncmem.com/download/WordPaster/linux/1.0.8/com.ncmem.wordpaster_2020.12.3-1_amd64.deb" }
 		, "arm64": { path: "http://res2.ncmem.com/download/WordPaster/arm64/1.0.5/com.ncmem.wordpaster_2020.12.3-1_arm64.deb" }
 		, "mips64": { path: "http://res2.ncmem.com/download/WordPaster/mips64/1.0.1/com.ncmem.wordpaster_2020.12.3-1_mips64el.deb" }
-		, errCode:{
-			"0": "连接服务器错误"
-		  , "1": "发送数据错误"
-		  , "2": "接收数据错误"
-		  , "3": "未设置文件路径"
-		  , "4": "本地文件不存在"
-		  , "5": "打开本地文件错误"
-		  , "6": "不能读取本地文件"
-		  , "7": "公司未授权"
-		  , "8": "未设置IP"
-		  , "9": "域名未授权"
-		  , "10": "文件大小超出限制"
-		  , "11": "不能设置回调函数"
-		  , "12": "Native控件错误"
-		  , "13": "Word图片数量超过限制"
-	  	}
-		, imgType:{local:0/*本地图片*/,network:1/*网络图片*/,word:2/*word图片*/}
-	};	
+	};
 	this.EditorContent = ""; //编辑器内容。当图片上传完后需要更新此变量值
 	this.CurrentUploader = null; //当前上传项。
 	this.UploaderList = new Object(); //上传项列表
@@ -309,8 +310,8 @@ export function WordPasterManager()
 	this.UploaderListCount = 0; //上传项总数
 	this.dialogOpened=false;
 	this.fileMap = new Object();//文件映射表。
-	this.postType = this.Config.imgType.word;//默认是word
-	this.working = false;//正在上传中
+	this.postType = this.data.type.word;//默认是word
+    this.working = false;//正在上传中
     this.pluginInited = false;
     this.edgeApp = new WebServer(this);
     this.app = {
@@ -400,23 +401,18 @@ export function WordPasterManager()
 	};
     this.app.ins = this;
     var browserName = navigator.userAgent.toLowerCase();
-	this.data.browser.ie = browserName.indexOf("msie") > 0;
+	this.data.browser.ie = this.data.browser.name.indexOf("msie") > 0;
     //IE11
-	this.data.browser.ie = this.data.browser.ie ? this.data.browser.ie : browserName.search(/(msie\s|trident.*rv:)([\w.]+)/) != -1;
-	this.data.browser.firefox = this.data.browserName.indexOf("firefox") > 0;
-	this.data.browser.chrome = this.data.browserName.indexOf("chrome") > 0;
-	this.data.browser.mips64 = this.data.browserName.indexOf("mips64")>0;
-	this.data.browser.arm64 = this.data.browserName.indexOf("aarch64")>0;
+	this.data.browser.ie = this.data.browser.ie ? this.data.browser.ie : this.data.browser.name.search(/(msie\s|trident.*rv:)([\w.]+)/) != -1;
+	this.data.browser.firefox = this.data.browser.name.indexOf("firefox") > 0;
+    this.data.browser.chrome = this.data.browser.name.indexOf("chrome") > 0;    
 	this.data.browser.chrome45 = false;
-	this.data.browser.edge = navigator.userAgent.indexOf("Edge") > 0;
+    this.data.browser.edge = this.data.browser.name.indexOf("Edge") > 0;
+    this.data.browser.arm64 = this.data.browser.platform.indexOf("aarch64")>0;
+    this.data.browser.mips64 = this.data.browser.platform.indexOf("mips64")>0;
 	this.chrVer = navigator.appVersion.match(/Chrome\/(\d+)/);
-	this.ffVer = navigator.userAgent.match(/Firefox\/(\d+)/);
-	if (this.data.browser.edge) { 
-		this.data.browser.ie = 
-		this.data.browser.firefox = 
-		this.data.browser.chrome = 
-		this.data.browser.chrome45 = false; 
-	}
+	this.ffVer = this.data.browser.name.match(/Firefox\/(\d+)/);
+	if (this.data.browser.edge) { this.data.browser.ie = this.data.browser.firefox = this.data.browser.chrome = this.data.browser.chrome45 = false; }
 
     //Win64
     if (window.navigator.platform == "Win64")
@@ -434,6 +430,18 @@ export function WordPasterManager()
         this.app.postMessage = this.app.postMessageEdge;
         this.edgeApp.run = this.edgeApp.runChr;
         this.Config.ExePath = this.Config.linux.path;
+    }
+    else if (this.data.browser.arm64) {
+        this.data.browser.edge = true;
+        this.app.postMessage = this.app.postMessageEdge;
+        this.edgeApp.run = this.edgeApp.runChr;
+        this.Config.ExePath = this.Config.arm64.path;
+    }
+    else if (this.data.browser.mips64) {
+        this.data.browser.edge = true;
+        this.app.postMessage = this.app.postMessageEdge;
+        this.edgeApp.run = this.edgeApp.runChr;
+        this.Config.ExePath = this.Config.mips64.path;
     }//Firefox
 	else if (this.data.browser.firefox)
     {
@@ -524,11 +532,6 @@ export function WordPasterManager()
 	{
 	    //Word图片粘贴
 	    var acx = "";
-	    /*
-			静态加截控件代码，在复杂WEB系统中或者框架页面中请静态方式加截Word解析组件(Xproer.WordParser)。
-			<object id="objWordParser" classid="clsid:2404399F-F06B-477F-B407-B8A5385D2C5E"	width="1" height="1" ></object>
-		*/
-        if (!this.data.browser.chrome45) acx += '<embed name="' + this.ffPasterName + '" type="' + this.Config["XpiType"] + '" pluginspage="' + this.Config["XpiPath"] + '" width="1" height="1"/>';
         //Word解析组件
         acx += ' <object name="' + this.iePasterName + '" classid="clsid:' + this.Config.ie.clsid + '"';
 	    acx += ' codebase="' + this.Config.ie.path + '#version=' + this.Config["Version"] + '"';
@@ -840,7 +843,7 @@ export function WordPasterManager()
 	};
 	this.WordParser_PasteWord = function (json)
     {
-	    this.postType = this.Config.imgType.word;
+	    this.postType = this.data.type.word;
 	    this.EditorContent = json.word;
 	    for (var i = 0, l = json.imgs.length; i < l; ++i)
 	    {
@@ -849,7 +852,7 @@ export function WordPasterManager()
 	};
 	this.WordParser_PasteExcel = function (json)
 	{
-	    this.postType = this.Config.imgType.word;
+	    this.postType = this.data.type.word;
 	    this.EditorContent = json.word;
 	    for (var i = 0, l = json.imgs.length; i < l; ++i)
 	    {
@@ -859,14 +862,14 @@ export function WordPasterManager()
 	};
 	this.WordParser_PasteHtml = function (json)
 	{
-	    this.postType = this.Config.imgType.word;
+	    this.postType = this.data.type.word;
 	    this.InsertHtml(json.word);//
         this.working = false;
         this.CloseDialogFile();
 	};
 	this.WordParser_PasteFiles = function (json)
 	{
-	    this.postType = this.Config.imgType.local;
+	    this.postType = this.data.type.local;
 	    for (var i = 0, l = json.imgs.length; i < l; ++i)
 	    {
 	        var task = this.addImgLoc(json.imgs[i]);
@@ -882,7 +885,7 @@ export function WordPasterManager()
 	};
 	this.WordParser_PasteAuto = function (json)
 	{
-	    this.postType = this.Config.imgType.network;
+	    this.postType = this.data.type.network;
 	    for (var i = 0, l = json.imgs.length; i < l; ++i)
 	    {
 	        this.addImgLoc(json.imgs[i]);
@@ -908,7 +911,7 @@ export function WordPasterManager()
 	{
 		this.OpenDialogPaste();
         this.imgMsg.html(
-            this.Config.errCode[json.value] + "<br/>" +
+            this.data.error[json.value] + "<br/>" +
             "PostUrl:" + this.Config["PostUrl"] + "<br/>" +
             "License:" + this.Config["License"] + "<br/>" +
             "License2:" + this.Config["License2"] + "<br/>" +
@@ -936,12 +939,12 @@ export function WordPasterManager()
 	this.Queue_Complete = function (json)
 	{
 	    //上传网络图片
-	    if (_this.postType == this.Config.imgType.network)
+	    if (_this.postType == this.data.type.network)
 	    {
 			//_this.GetEditor().setData(json.word);
 			this.data.editor.setData( json.word );
 	    } //上传Word图片时才替换内容
-	    else if (_this.postType == this.Config.imgType.word)
+	    else if (_this.postType == this.data.type.word)
 	    {
 	        _this.InsertHtml(json.word);//
 	    }
@@ -955,10 +958,10 @@ export function WordPasterManager()
         this.CloseDialogPaste();
     };
     this.imgs_out_limit = function (json) {
-        layer.alert(this.Config.errCode["13"] + "<br/>文档图片数量：" + json.imgCount + "<br/>限制数量：" + json.imgLimit, { icon: 2 });
+        layer.alert(this.data.error["13"] + "<br/>文档图片数量：" + json.imgCount + "<br/>限制数量：" + json.imgLimit, { icon: 2 });
     };
     this.url_unauth = function (json) {
-        layer.alert(this.Config.errCode["9"] + "<br/>PostUrl：" + json.url, { icon: 2 });
+        layer.alert(this.data.error["9"] + "<br/>PostUrl：" + json.url, { icon: 2 });
     };
     this.state_change = function (json) {
         if (json.value == "parse_document")
