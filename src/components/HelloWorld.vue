@@ -1,7 +1,7 @@
 <template>
   <div class="hello">
     <h1>{{ msg }}</h1>
-    <vue-ueditor-wrap v-model="msg" :config="myConfig" @beforeInit="ueditorInit"></vue-ueditor-wrap>
+    <vue-ueditor-wrap v-model="msg" :config="myConfig" @beforeInit="ueditorInit" @ready="ready"></vue-ueditor-wrap>
   </div>
 </template>
 
