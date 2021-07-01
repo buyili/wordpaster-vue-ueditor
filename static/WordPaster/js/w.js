@@ -260,7 +260,7 @@ export function WordPasterManager()
 		editor:null,
 		"EncodeType"		    : "GB2312"
 		, "Company"			    : "荆门泽优软件有限公司"
-		, "Version"			    : "1,5,140,60764"
+		, "Version"			    : "1,5,141,60875"
 		, "License2"			: ""
 		, "Debug"			    : false//调试模式
 		, "LogFile"			    : "f:\\log.txt"//日志文件路径
