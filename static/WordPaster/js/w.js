@@ -6,7 +6,7 @@ import './jquery-1.8.3.min'
 	产品：http://www.ncmem.com/webapp/wordpaster/index.aspx
     控件：http://www.ncmem.com/webapp/wordpaster/pack.aspx
     示例：http://www.ncmem.com/webapp/wordpaster/versions.aspx
-    版本：2.4.3
+    版本：2.4.4
     更新记录：
 		2012-07-04 增加对IE9的支持。
 */
@@ -487,9 +487,11 @@ export function WordPasterManager()
             title: "安装提示",
             closeBtn: 1,
             area: ['291px', '124px'],
-            skin: 'layui-layer-nobg',
-             scrollbar: false,
-            content: _this.ui.setup
+            scrollbar: false,
+            content: _this.ui.setup,
+            end: function () {
+                this.layerPaste=0;
+            }
         });
     };
     this.need_update = function ()
@@ -502,8 +504,10 @@ export function WordPasterManager()
             title: "更新提示",
             closeBtn: 1,
             area: ['170px', '113px'],
-            skin: 'layui-layer-nobg',
-            content: _this.ui.setup
+            content: _this.ui.setup,
+            end: function () {
+                this.layerPaste=0;
+            }
         });
     };
 	this.setupTipClose = function ()
@@ -666,14 +670,16 @@ export function WordPasterManager()
             title: "上传进度",
             closeBtn: 1,
             area: ['500px', '107px'],
-            skin: 'layui-layer-nobg',
             shadeClose: false,
             content: _this.imgPasterDlg,
             cancel: function(){
         		if(_this.working)return false;
         		return true;
         		_this.dialogOpened=false;
-        	} 
+        	},
+            end: function () {
+                _this.layerPaste = 0;
+            }        
         });
 	};
 	this.CloseDialogPaste = function ()
@@ -704,26 +710,16 @@ export function WordPasterManager()
 	this.PasteManual = function ()
 	{
 	    if( !this.pluginCheck() ) return;
+        if(this.working) return;        
         this.app.paste();
+        this.working = true;
     };
 
     //powerpoint
 	this.PastePPT = function ()
 	{
 		if( !this.pluginCheck() ) return;
-		if (!this.data.browser.chrome45 && !_this.data.browser.edge)
-		{
-
-			this.app.pastePPT();
-		}
-		else if (this.data.browser.chrome45)
-		{
-			this.app.pastePPT();
-		}
-		else if(this.data.browser.edge)
-		{
-			this.app.pastePPT();
-		}
+		this.app.pastePPT();
 	};
 
     //上传网络图片
@@ -864,8 +860,8 @@ export function WordPasterManager()
 	{
 	    this.postType = this.data.type.word;
 	    this.InsertHtml(json.word);//
-        this.working = false;
         this.CloseDialogFile();
+	    this.working = false;
 	};
 	this.WordParser_PasteFiles = function (json)
 	{
