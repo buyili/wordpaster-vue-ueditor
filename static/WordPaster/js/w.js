@@ -223,7 +223,7 @@ export function WordPasterManager()
     this.imgIco = null;//jquery obj
     this.imgMsg = null;//jquery obj
     this.imgPercent = null;//jquery obj
-    this.ui = { setup: null ,single:null};
+    this.ui = { setup: null ,single:null,dialog:{files:0/**word图片上传窗口 */,paste:0/**粘贴窗口 */}};
     this.data={
     	editor:null,
         browser:{name:navigator.userAgent.toLowerCase(),ie:true,ie64:false,chrome:false,firefox:false,edge:false,arm64:false,mips64:false,platform:window.navigator.platform.toLowerCase()},
@@ -243,9 +243,8 @@ export function WordPasterManager()
         "12": "Native控件错误",
         "13": "Word图片数量超过限制"
       },
-      type:{local:0/*本地图片*/,network:1/*网络图片*/,word:2/*word图片*/}
+      type:{local:0/*本地图片*/,network:1/*网络图片*/,word:2/*word图片*/},
     };
-    this.layerPaste = 0;
     this.ffPaster = null;
     this.ieParser = null;
     this.ffPasterName = "ffPaster" + new Date().getTime();
@@ -482,7 +481,7 @@ export function WordPasterManager()
         var dom = this.ui.setup.find("div").html("控件加载中，如果未加载成功请先<a name='w-exe'>安装控件</a>");
         var lnk = dom.find('a[name="w-exe"]');
         lnk.attr("href", this.Config["ExePath"]);
-        this.layerPaste = layer.open({
+        this.ui.dialog.paste = layer.open({
             type: 1,
             title: "安装提示",
             closeBtn: 1,
@@ -490,7 +489,7 @@ export function WordPasterManager()
             scrollbar: false,
             content: _this.ui.setup,
             end: function () {
-                this.layerPaste=0;
+                _this.ui.dialog.paste=0;
             }
         });
     };
@@ -499,14 +498,14 @@ export function WordPasterManager()
         var dom = this.ui.setup.html("发现新版本，请<a name='w-exe' href='#'>更新</a>");
         var lnk = dom.find('a[name="w-exe"]');
         lnk.attr("href", this.Config["ExePath"]);
-        this.layerPaste = layer.open({
+        this.ui.dialog.paste = layer.open({
             type: 1,
             title: "更新提示",
             closeBtn: 1,
             area: ['170px', '113px'],
             content: _this.ui.setup,
             end: function () {
-                this.layerPaste=0;
+                _this.ui.dialog.paste=0;
             }
         });
     };
@@ -642,7 +641,8 @@ export function WordPasterManager()
     //打开图片上传对话框
 	this.OpenDialogFile = function ()
 	{
-        this.layerImgs = layer.open({
+        if(0 == this.ui.dialog.files)
+        this.ui.dialog.files = layer.open({
             type: 1,
             title: "图片上传窗口",
             closeBtn: 1,
@@ -653,19 +653,22 @@ export function WordPasterManager()
             cancel: function () {
                 if (_this.working) return false;
                 return true;
+            },
+            end:function(){
+                _this.ui.dialog.files=0;
             }
         });
 	};
 	this.CloseDialogFile = function ()
 	{
-        layer.close(this.layerImgs);
+        layer.closeAll();
 	};
 
     //打开粘贴图片对话框
 	this.OpenDialogPaste = function ()
 	{
-		if(!this.dialogOpened)
-        this.layerPaste = layer.open({
+		if(!this.dialogOpened && this.ui.dialog.paste==0)
+        this.ui.dialog.paste = layer.open({
             type: 1,
             title: "上传进度",
             closeBtn: 1,
@@ -678,15 +681,14 @@ export function WordPasterManager()
         		_this.dialogOpened=false;
         	},
             end: function () {
-                _this.layerPaste = 0;
+                _this.ui.dialog.paste = 0;
             }        
         });
 	};
 	this.CloseDialogPaste = function ()
 	{
-        layer.close(this.layerPaste);
+        layer.closeAll();
         this.dialogOpened = false;
-        this.layerPaste = 0;
 	};
 	this.InsertHtml = function (html)
 	{
