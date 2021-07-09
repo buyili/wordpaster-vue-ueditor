@@ -307,7 +307,6 @@ export function WordPasterManager()
     //已上传图片列表
     //模型：LocalUrl:ServerUrl
 	this.UploaderListCount = 0; //上传项总数
-	this.dialogOpened=false;
 	this.fileMap = new Object();//文件映射表。
 	this.postType = this.data.type.word;//默认是word
     this.working = false;//正在上传中
@@ -667,7 +666,7 @@ export function WordPasterManager()
     //打开粘贴图片对话框
 	this.OpenDialogPaste = function ()
 	{
-		if(!this.dialogOpened && this.ui.dialog.paste==0)
+		if( 0 == this.ui.dialog.paste )
         this.ui.dialog.paste = layer.open({
             type: 1,
             title: "上传进度",
@@ -678,7 +677,6 @@ export function WordPasterManager()
             cancel: function(){
         		if(_this.working)return false;
         		return true;
-        		_this.dialogOpened=false;
         	},
             end: function () {
                 _this.ui.dialog.paste = 0;
@@ -688,7 +686,6 @@ export function WordPasterManager()
 	this.CloseDialogPaste = function ()
 	{
         layer.closeAll();
-        this.dialogOpened = false;
 	};
 	this.InsertHtml = function (html)
 	{
