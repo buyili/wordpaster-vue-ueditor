@@ -718,7 +718,9 @@ export function WordPasterManager()
 	this.PastePPT = function ()
 	{
 		if( !this.pluginCheck() ) return;
+		if(this.working) return;
 		this.app.pastePPT();
+		this.working = true;
 	};
 
     //上传网络图片
