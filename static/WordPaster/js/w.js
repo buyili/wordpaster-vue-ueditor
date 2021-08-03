@@ -697,6 +697,7 @@ export function WordPasterManager()
 	this.SetEditor = function (edt)
 	{
 	    _this.Editor = edt;
+        this.data.editor = edt;
 	};
 
     //粘贴命令
@@ -939,7 +940,7 @@ export function WordPasterManager()
 	    if (_this.postType == this.data.type.network)
 	    {
 			//_this.GetEditor().setData(json.word);
-			this.data.editor.setData( json.word );
+			this.data.editor.setContent( json.word );
 	    } //上传Word图片时才替换内容
 	    else if (_this.postType == this.data.type.word)
 	    {
