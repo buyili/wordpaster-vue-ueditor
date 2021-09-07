@@ -283,23 +283,23 @@ export function WordPasterManager()
 		, "IcoUploader"         : "http://www.ncmem.com/products/word-imagepaster/ckeditor353/WordPaster/upload.gif"
 		, "PostUrl"			    : "http://www.ncmem.com/products/word-imagepaster/fckeditor2461/asp.net/upload.aspx"
 		//x86
-		,ie:{name:"Xproer.WordParser2",clsid:"2404399F-F06B-477F-B407-B8A5385D2C5E",path:"http://res2.ncmem.com/download/WordPaster/fast/2.0.29/WordPaster.cab"}
+		,ie:{name:"Xproer.WordParser2",clsid:"2404399F-F06B-477F-B407-B8A5385D2C5E",path:"http://res2.ncmem.com/download/WordPaster/fast/2.0.34/WordPaster.cab"}
 		//x64
-		,ie64:{name:"Xproer.WordParser2x64",clsid:"7C3DBFA4-DDE6-438A-BEEA-74920D90764B",path:"http://res2.ncmem.com/download/WordPaster/fast/2.0.29/WordPaster64.cab"}
+		,ie64:{name:"Xproer.WordParser2x64",clsid:"7C3DBFA4-DDE6-438A-BEEA-74920D90764B",path:"http://res2.ncmem.com/download/WordPaster/fast/2.0.34/WordPaster64.cab"}
 		//Firefox
 		, "XpiType"	            : "application/npWordPaster2"
-		, "XpiPath"		        : "http://res2.ncmem.com/download/WordPaster/fast/2.0.29/WordPaster.xpi"
+		, "XpiPath"		        : "http://res2.ncmem.com/download/WordPaster/fast/2.0.34/WordPaster.xpi"
 		//Chrome
 		, "CrxName"		        : "npWordPaster2"
 		, "CrxType"	            : "application/npWordPaster2"
-		, "CrxPath"		        : "http://res2.ncmem.com/download/WordPaster/fast/2.0.29/WordPaster.crx"
+		, "CrxPath"		        : "http://res2.ncmem.com/download/WordPaster/fast/2.0.34/WordPaster.crx"
 		//Edge
 		, edge: { protocol: "wordpaster", port: 9200, visible: false }
-		, "ExePath": "http://res2.ncmem.com/download/WordPaster/fast/2.0.29/WordPaster.exe"
-		, "mac": { path: "http://res2.ncmem.com/download/WordPaster/mac/1.0.17/WordPaster.pkg" }
-		, "linux": { path: "http://res2.ncmem.com/download/WordPaster/linux/1.0.8/com.ncmem.wordpaster_2020.12.3-1_amd64.deb" }
-		, "arm64": { path: "http://res2.ncmem.com/download/WordPaster/arm64/1.0.5/com.ncmem.wordpaster_2020.12.3-1_arm64.deb" }
-		, "mips64": { path: "http://res2.ncmem.com/download/WordPaster/mips64/1.0.1/com.ncmem.wordpaster_2020.12.3-1_mips64el.deb" }
+		, "ExePath": "http://res2.ncmem.com/download/WordPaster/fast/2.0.34/WordPaster.exe"
+		, "mac": { path: "http://res2.ncmem.com/download/WordPaster/mac/1.0.29/WordPaster.pkg" }
+		, "linux": { path: "http://res2.ncmem.com/download/WordPaster/linux/1.0.16/com.ncmem.wordpaster_2020.12.3-1_amd64.deb" }
+		, "arm64": { path: "http://res2.ncmem.com/download/WordPaster/arm64/1.0.14/com.ncmem.wordpaster_2020.12.3-1_arm64.deb" }
+		, "mips64": { path: "http://res2.ncmem.com/download/WordPaster/mips64/1.0.11/com.ncmem.wordpaster_2020.12.3-1_mips64el.deb" }
 	};
 	this.EditorContent = ""; //编辑器内容。当图片上传完后需要更新此变量值
 	this.CurrentUploader = null; //当前上传项。
