@@ -277,7 +277,7 @@ export function WordPasterManager()
 		, "FileCountLimit"		: 300//图片数量限制
 		, "AppPath"			    : ""
 		, "Cookie"			    : ""
-		, "Servers"             : [{"url":"www.ncmem.com"},{"url":"www.xproerui.com"}]//内部服务器地址(不下载此地址中的图片)
+		, "Servers"             : [{"url":"www.ncmem.com"}]//内部服务器地址(不下载此地址中的图片)
 		, "WebImg"              : {urlEncode:true/*下载外部图片地址是URL是否自动编码，默认情况下自动编码，部分网站URL没有进行编码*/}
 		, "IcoError"            : "http://www.ncmem.com/products/word-imagepaster/ckeditor353/WordPaster/error.png"
 		, "IcoUploader"         : "http://www.ncmem.com/products/word-imagepaster/ckeditor353/WordPaster/upload.gif"
@@ -297,9 +297,9 @@ export function WordPasterManager()
 		, edge: { protocol: "wordpaster", port: 9200, visible: false }
 		, "ExePath": "http://res2.ncmem.com/download/WordPaster/fast/2.0.34/WordPaster.exe"
 		, "mac": { path: "http://res2.ncmem.com/download/WordPaster/mac/1.0.29/WordPaster.pkg" }
-		, "linux": { path: "http://res2.ncmem.com/download/WordPaster/linux/1.0.16/com.ncmem.wordpaster_2020.12.3-1_amd64.deb" }
-		, "arm64": { path: "http://res2.ncmem.com/download/WordPaster/arm64/1.0.14/com.ncmem.wordpaster_2020.12.3-1_arm64.deb" }
-		, "mips64": { path: "http://res2.ncmem.com/download/WordPaster/mips64/1.0.11/com.ncmem.wordpaster_2020.12.3-1_mips64el.deb" }
+		, "linux": { path: "http://res2.ncmem.com/download/WordPaster/linux/1.0.17/com.ncmem.wordpaster_2020.12.3-1_amd64.deb" }
+		, "arm64": { path: "http://res2.ncmem.com/download/WordPaster/arm64/1.0.15/com.ncmem.wordpaster_2020.12.3-1_arm64.deb" }
+		, "mips64": { path: "http://res2.ncmem.com/download/WordPaster/mips64/1.0.12/com.ncmem.wordpaster_2020.12.3-1_mips64el.deb" }
 	};
 	this.EditorContent = ""; //编辑器内容。当图片上传完后需要更新此变量值
 	this.CurrentUploader = null; //当前上传项。
