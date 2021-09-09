@@ -711,17 +711,17 @@ export function WordPasterManager()
 	{
 	    if( !this.pluginCheck() ) return;
         if(this.working) return;        
-        this.app.paste();
         this.working = true;
+        this.app.paste();
     };
 
     //powerpoint
 	this.PastePPT = function ()
 	{
-		if( !this.pluginCheck() ) return;
-		if(this.working) return;
-		this.app.pastePPT();
-		this.working = true;
+        if (!this.pluginCheck()) return;
+        if (this.working) return;
+        this.working = true;
+        this.app.pastePPT();
 	};
 
     //上传网络图片
