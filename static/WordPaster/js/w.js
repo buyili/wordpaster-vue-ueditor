@@ -268,11 +268,13 @@ export function WordPasterManager()
 		, "PasteImgSrc"		    : ""	//shape:优先使用源公式图片，img:使用word自动生成的图片
 		, "JpgQuality"		    : "100"	//JPG质量。0~100
 		, "QueueCount"		    : "5"	//同时上传线程数
-		, "CryptoType"		    : "uuid"//名称计算方式,md5,crc,sha1,uuid，其中uuid为随机名称
+		, "CryptoType"		    : "crc"//名称计算方式,md5,crc,sha1,uuid，其中uuid为随机名称
 		, "ThumbWidth"		    : "0"	//缩略图宽度。0表示不使用缩略图
 		, "ThumbHeight"		    : "0"	//缩略图高度。0表示不使用缩略图
 		, "FileFieldName"		: "file"//自定义文件名称名称
+		//图片地址匹配规则配置教程：http://www.ncmem.com/doc/view.aspx?id=07e3f323d22d4571ad213441ab8530d1
 		, "ImageMatch"		    : ""//服务器返回数据匹配模式，正则表达式，提取括号中的地址
+		//自定义图片地址配置教程：http://www.ncmem.com/doc/view.aspx?id=704cd302ebd346b486adf39cf4553936
 		, "ImageUrl"		    : ""//自定义图片地址，格式"{url}"，{url}为固定变量，在此变量前后拼接图片路径，此变量的值为posturl返回的图片地址
 		, "FileCountLimit"		: 300//图片数量限制
 		, "AppPath"			    : ""
@@ -281,6 +283,7 @@ export function WordPasterManager()
 		, "WebImg"              : {urlEncode:true/*下载外部图片地址是URL是否自动编码，默认情况下自动编码，部分网站URL没有进行编码*/}
 		, "IcoError"            : "http://www.ncmem.com/products/word-imagepaster/ckeditor353/WordPaster/error.png"
 		, "IcoUploader"         : "http://www.ncmem.com/products/word-imagepaster/ckeditor353/WordPaster/upload.gif"
+		//上传接口配置教程：http://www.ncmem.com/doc/view.aspx?id=d88b60a2b0204af1ba62fa66288203ed
 		, "PostUrl"			    : "http://www.ncmem.com/products/word-imagepaster/fckeditor2461/asp.net/upload.aspx"
 		//x86
 		,ie:{name:"Xproer.WordParser2",clsid:"2404399F-F06B-477F-B407-B8A5385D2C5E",path:"http://res2.ncmem.com/download/WordPaster/fast/2.0.34/WordPaster.cab"}

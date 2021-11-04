@@ -36,6 +36,7 @@ export default {
     ueditorInit(){
           //初始化
           WordPaster.getInstance({
+			//上传接口配置教程：http://www.ncmem.com/doc/view.aspx?id=d88b60a2b0204af1ba62fa66288203ed
             PostUrl:"http://localhost:8891/upload.aspx",
             ImageUrl:"http://localhost:8891{url}"
           }).Load();
