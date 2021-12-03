@@ -267,6 +267,7 @@ export function WordPasterManager()
 		, "PasteImageType"	    : ""	//粘贴文件，剪帖板的图片格式，为空表示本地图片格式。JPG/PNG/GIF/BMP
 		, "PasteImgSrc"		    : ""	//shape:优先使用源公式图片，img:使用word自动生成的图片
 		, "JpgQuality"		    : "100"	//JPG质量。0~100
+		, "PowerPoint"          : {sleep:500/*解析powerpoint时延迟时间*/}
 		, "QueueCount"		    : "5"	//同时上传线程数
 		, "CryptoType"		    : "crc"//名称计算方式,md5,crc,sha1,uuid，其中uuid为随机名称
 		, "ThumbWidth"		    : "0"	//缩略图宽度。0表示不使用缩略图
@@ -285,6 +286,7 @@ export function WordPasterManager()
 		, "IcoUploader"         : "http://www.ncmem.com/products/word-imagepaster/ckeditor353/WordPaster/upload.gif"
 		//上传接口配置教程：http://www.ncmem.com/doc/view.aspx?id=d88b60a2b0204af1ba62fa66288203ed
 		, "PostUrl"			    : "http://www.ncmem.com/products/word-imagepaster/fckeditor2461/asp.net/upload.aspx"
+		, "Fields"              : {}
 		//x86
 		,ie:{name:"Xproer.WordParser2",clsid:"2404399F-F06B-477F-B407-B8A5385D2C5E",path:"http://res2.ncmem.com/download/WordPaster/fast/2.0.34/WordPaster.cab"}
 		//x64
@@ -362,7 +364,7 @@ export function WordPasterManager()
 				document.write('<iframe style="display:none;" src="' + this.config["XpiPath"] + '"></iframe>');
 		}
 		, init: function () {
-			var param = { name: "init", config: this.ins.Config,fields:this.ins.Fields };
+			var param = { name: "init", config: this.ins.Config,fields:this.ins.Config.Fields };
 			this.postMessage(param);
 		}
 		, exit: function () {
