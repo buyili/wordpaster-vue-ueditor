@@ -138,24 +138,24 @@ export function WordPasterManager()
         });
         return btn;
     });
-    window.UE.registerUI('netpaster', function (editor, uiName) {
+    window.UE.registerUI('ppt', function (editor, uiName) {
         editor.registerCommand(uiName, {
             execCommand: function () {
                 editor.focus();
                 _this.SetEditor(editor);
-                _this.UploadNetImg();
+                _this.PastePPT();
             }
         });
-        var iconUrl = editor.options.UEDITOR_HOME_URL + '../WordPaster/css/net.png';
+        var iconUrl = editor.options.UEDITOR_HOME_URL + '../WordPaster/css/ppt.png';
 
         var btn = new window.UE.ui.Button({
-            name: "自动上传网络图片",
-            title: '自动上传网络图片',
+            name: "PowerPoint一键粘贴",
+            title: 'PowerPoint一键粘贴',
             cssRules: 'background: url("' + iconUrl + '") no-repeat 2px 2px !important',
             onclick: function () {
                 editor.focus();
                 _this.SetEditor(editor);
-                _this.UploadNetImg();
+                _this.PastePPT();
             }
         });
         editor.addListener('selectionchange', function () {
@@ -176,24 +176,62 @@ export function WordPasterManager()
         });
         return btn;
     });
-    window.UE.registerUI('ppt', function (editor, uiName) {
+	window.UE.registerUI('pdf', function (editor, uiName) {
         editor.registerCommand(uiName, {
             execCommand: function () {
                 editor.focus();
                 _this.SetEditor(editor);
-                _this.PastePPT();
+                _this.ImportPDF();
             }
         });
-        var iconUrl = editor.options.UEDITOR_HOME_URL + '../WordPaster/css/ppt.png';
+        var iconUrl = editor.options.UEDITOR_HOME_URL + '../WordPaster/css/pdf.png';
 
         var btn = new window.UE.ui.Button({
-            name: "PowerPoint一键粘贴",
-            title: 'PowerPoint一键粘贴',
+            name: "一键导入pdf",
+            title: '一键导入pdf',
             cssRules: 'background: url("' + iconUrl + '") no-repeat 2px 2px !important',
             onclick: function () {
                 editor.focus();
                 _this.SetEditor(editor);
-                _this.PastePPT();
+                _this.ImportPDF();
+            }
+        });
+        editor.addListener('selectionchange', function () {
+            var state = editor.queryCommandState(uiName);
+            if (state == -1) {
+                btn.setDisabled(true);
+                btn.setChecked(false);
+            } else {
+                btn.setDisabled(false);
+                btn.setChecked(state);
+            }
+        });
+        editor.addListener('ready', function () {
+            _this.SetEditor(editor);
+        });
+        editor.addListener("firstBeforeExecCommand", function () {
+            _this.SetEditor(editor);
+        });
+        return btn;
+    });
+	window.UE.registerUI('netpaster', function (editor, uiName) {
+        editor.registerCommand(uiName, {
+            execCommand: function () {
+                editor.focus();
+                _this.SetEditor(editor);
+                _this.UploadNetImg();
+            }
+        });
+        var iconUrl = editor.options.UEDITOR_HOME_URL + '../WordPaster/css/net.png';
+
+        var btn = new window.UE.ui.Button({
+            name: "自动上传网络图片",
+            title: '自动上传网络图片',
+            cssRules: 'background: url("' + iconUrl + '") no-repeat 2px 2px !important',
+            onclick: function () {
+                editor.focus();
+                _this.SetEditor(editor);
+                _this.UploadNetImg();
             }
         });
         editor.addListener('selectionchange', function () {
@@ -268,6 +306,7 @@ export function WordPasterManager()
 		, "PasteImgSrc"		    : ""	//shape:优先使用源公式图片，img:使用word自动生成的图片
 		, "JpgQuality"		    : "100"	//JPG质量。0~100
 		, "PowerPoint"          : {sleep:500/*解析powerpoint时延迟时间*/}
+		, "PDF"                 : {zoom:150/*缩放比例*/}
 		, "QueueCount"		    : "5"	//同时上传线程数
 		, "CryptoType"		    : "crc"//名称计算方式,md5,crc,sha1,uuid，其中uuid为随机名称
 		, "ThumbWidth"		    : "0"	//缩略图宽度。0表示不使用缩略图
@@ -288,23 +327,23 @@ export function WordPasterManager()
 		, "PostUrl"			    : "http://www.ncmem.com/products/word-imagepaster/fckeditor2461/asp.net/upload.aspx"
 		, "Fields"              : {}
 		//x86
-		,ie:{name:"Xproer.WordParser2",clsid:"2404399F-F06B-477F-B407-B8A5385D2C5E",path:"http://res2.ncmem.com/download/WordPaster/fast/2.0.34/WordPaster.cab"}
+		,ie:{name:"Xproer.WordParser2",clsid:"2404399F-F06B-477F-B407-B8A5385D2C5E",path:"http://res2.ncmem.com/download/WordPaster/fast/2.0.38/WordPaster.cab"}
 		//x64
-		,ie64:{name:"Xproer.WordParser2x64",clsid:"7C3DBFA4-DDE6-438A-BEEA-74920D90764B",path:"http://res2.ncmem.com/download/WordPaster/fast/2.0.34/WordPaster64.cab"}
+		,ie64:{name:"Xproer.WordParser2x64",clsid:"7C3DBFA4-DDE6-438A-BEEA-74920D90764B",path:"http://res2.ncmem.com/download/WordPaster/fast/2.0.38/WordPaster64.cab"}
 		//Firefox
 		, "XpiType"	            : "application/npWordPaster2"
-		, "XpiPath"		        : "http://res2.ncmem.com/download/WordPaster/fast/2.0.34/WordPaster.xpi"
+		, "XpiPath"		        : "http://res2.ncmem.com/download/WordPaster/fast/2.0.38/WordPaster.xpi"
 		//Chrome
 		, "CrxName"		        : "npWordPaster2"
 		, "CrxType"	            : "application/npWordPaster2"
-		, "CrxPath"		        : "http://res2.ncmem.com/download/WordPaster/fast/2.0.34/WordPaster.crx"
+		, "CrxPath"		        : "http://res2.ncmem.com/download/WordPaster/fast/2.0.38/WordPaster.crx"
 		//Edge
 		, edge: { protocol: "wordpaster", port: 9200, visible: false }
-		, "ExePath": "http://res2.ncmem.com/download/WordPaster/fast/2.0.34/WordPaster.exe"
-		, "mac": { path: "http://res2.ncmem.com/download/WordPaster/mac/1.0.29/WordPaster.pkg" }
-		, "linux": { path: "http://res2.ncmem.com/download/WordPaster/linux/1.0.17/com.ncmem.wordpaster_2020.12.3-1_amd64.deb" }
-		, "arm64": { path: "http://res2.ncmem.com/download/WordPaster/arm64/1.0.15/com.ncmem.wordpaster_2020.12.3-1_arm64.deb" }
-		, "mips64": { path: "http://res2.ncmem.com/download/WordPaster/mips64/1.0.12/com.ncmem.wordpaster_2020.12.3-1_mips64el.deb" }
+		, "ExePath": "http://res2.ncmem.com/download/WordPaster/fast/2.0.38/WordPaster.exe"
+		, "mac": { path: "http://res2.ncmem.com/download/WordPaster/mac/1.0.32/WordPaster.pkg" }
+		, "linux": { path: "http://res2.ncmem.com/download/WordPaster/linux/1.0.21/com.ncmem.wordpaster_2020.12.3-1_amd64.deb" }
+		, "arm64": { path: "http://res2.ncmem.com/download/WordPaster/arm64/1.0.18/com.ncmem.wordpaster_2020.12.3-1_arm64.deb" }
+		, "mips64": { path: "http://res2.ncmem.com/download/WordPaster/mips64/1.0.15/com.ncmem.wordpaster_2020.12.3-1_mips64el.deb" }
 	};
 	this.EditorContent = ""; //编辑器内容。当图片上传完后需要更新此变量值
 	this.CurrentUploader = null; //当前上传项。
@@ -383,6 +422,10 @@ export function WordPasterManager()
 		}
 		, pastePPT: function () {
 			var param = { name: "pastePPT"};
+			this.postMessage(param);
+		}
+		, importPDF: function () {
+			var param = { name: "importPDF"};
 			this.postMessage(param);
 		}
 		, pasteAuto: function (data) {
@@ -727,6 +770,15 @@ export function WordPasterManager()
         if (this.working) return;
         this.working = true;
         this.app.pastePPT();
+	};
+
+    //pdf
+	this.ImportPDF = function ()
+	{
+        if (!this.pluginCheck()) return;
+        if (this.working) return;
+        this.working = true;
+        this.app.importPDF();
 	};
 
     //上传网络图片
